@@ -12,7 +12,7 @@ struct no {
 
 typedef struct no no;
 
-float S(int *matrix[1][500], no no[500], int linha){
+float S(int matrix[500][500], no no[500], int linha){
     int i, j;
     float soma = 0;
 
@@ -32,6 +32,6 @@ void main(){
     no neuronios[500];
 
     for(i = 0; i < 500; i++){
-        //vet_S[i] = S(matriz)
+        vet_S[i] = S(matriz[500][500], no[500], i])
     }
 }
