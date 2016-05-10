@@ -39,14 +39,14 @@ double S(int matrix[500][500], no no[500], int linha){
 
 double delta_x(int matriz[500][500], no neuronios[500], int id){
         double deltaX;
-        deltaX = 3 * neuronios[id].x - pow(neuronios[id].x, 3) + 2 - neuronios[id].y  + (double)I_at + S(matriz, neuronios, id);
+        deltaX = 3 * neuronios[id].x - pow(neuronios[id].x, 3) + 2 - neuronios[id].y  + I_at /*+ S(matriz, neuronios, id)*/;
         //printf("neuronio y: %.2f\n", neuronios[id].y);
         return deltaX;
 }
 
 double delta_y(int matriz[500][500], no neuronios[500], int id){
         double deltaY;
-        deltaY = epsilon*(alfa*(1+tanh((neuronios[id].x)/beta))-neuronios[id].y);
+        deltaY = epsilon*(alfa*(1+tanh(neuronios[id].x/beta))-neuronios[id].y);
 
         return deltaY;
 }
@@ -57,20 +57,41 @@ int main(){
     int i, j, t;
     double vet_S[500];
     no neuronios[500];
+    no armaz[500];
 
-    neuronios[0].x=-1;
-    neuronios[0].y=1;
+    //Valores Iniciais do Neurônio
+    neuronios[0].x=10;
+    neuronios[0].y=1000;
+    //neuronios[1].x=1;
+    //neuronios[1].y=0;
 
-    for(t=0;t<50;t++){
+    //matriz[0][0]=0;
+    //matriz[0][1]=1;
+    //matriz[1][0]=1;
+    //matriz[1][1]=0;
+
+    for(t=0;t<20;t++){
         /*for(i = 0; i < 500; i++){
             vet_S[i] = S(matriz, neuronios, i);
             neuronios[i].x = neuronios[i].x + delta_x(matriz,neuronios,i);
             neuronios[i].y = neuronios[i].y + delta_y(matriz,neuronios,i);
         }
         */
-        neuronios[0].x += delta_x(matriz,neuronios,0);
-        neuronios[0].y += delta_y(matriz,neuronios,0);
-        printf("%.2f\n", neuronios[0].x);
+        //vet_S[0] = S(matriz, neuronios, 0);
+        //vet_S[1] = S(matriz, neuronios, 1);
+        armaz[0].x = neuronios[0].x;
+        armaz[0].y = neuronios[0].y;
+        //armaz[1].x = neuronios[1].x;
+        //armaz[1].y = neuronios[1].y;
+
+        neuronios[0].x += delta_x(matriz,armaz,0);
+        neuronios[0].y += delta_y(matriz,armaz,0);
+        //neuronios[1].x += delta_x(matriz,armaz,1);
+        //neuronios[1].y += delta_y(matriz,armaz,1);
+        printf("x_0 = %.2f\n", neuronios[0].x);
+        printf("y_0 = %.2f\n", neuronios[0].y);
+        //printf("x_1 = %.2f\n", neuronios[1].x);
+        //printf("y_1 = %.2f\n", neuronios[1].y);
     }
 
 
