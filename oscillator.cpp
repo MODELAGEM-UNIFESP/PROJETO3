@@ -5,21 +5,14 @@
 #define MAX 500 // QUILES
 #define DT 0.01 // QUILES
 
-double W  = 0.1;
-double alfa  = 6.0;
-double beta  = 0.1;
-double theta  = 0.5;
-double epsilon  = 0.02;
-double rho  = 0;
-double I_at  = 0.2;
-double I_des  = -0.02;
-/*#define alfa 6.0
+#define W 0.1;
+#define alfa 6.0
 #define beta 0.1
 #define theta 0.5
 #define epsilon 0.02
 #define rho 0
 #define I_at 0.2
-#define I_des -0.2*/
+#define I_des -0.2
 
 struct no {
 	double x;
