@@ -23,6 +23,31 @@ struct no {
 
 typedef struct no Tno;
 
+void carrega_matriz(int matriz[MAX][MAX]){
+    int i, j, k;
+    int lin, col;
+
+    for(i = 0; i < MAX; i++){
+        for(j = 0; j< MAX; j++){
+            matriz[i][j] = 0;
+        }
+    }
+
+    for(i = 0; i < MAX; i++){
+        scanf("%d %d", &lin, &col);
+        matriz[lin][col] = 1;
+        matriz[col][lin] = 1;
+    }
+
+    for(k = 0; k < 100; k++)
+        for(i = 0; i < MAX; i++){
+            for(j = 0; j< MAX; j++){
+                printf("%d\n", matriz[i][j]);
+            }
+            printf("\n");
+        }
+}
+
 double S(int matrix[MAX][MAX], Tno neu[MAX], int linha){
     int i;
     double soma = 0;
@@ -40,7 +65,6 @@ double delta_x(int matriz[MAX][MAX], Tno neuronios[MAX], int id){
     // QUILES - em equações envolvendo ponto flutuante, evitar o uso de inteiros, por exemplo, na equacao abaixo, substitui 3 por 3.0, etc.
     // QUILES - Faltou o passo de integração DT
         deltaX = (3.0 * neuronios[id].x - pow(neuronios[id].x, 3.0) + 2.0 - neuronios[id].y  + I_at)*DT + S(matriz, neuronios, id);
-        //printf("neuronio y: %.2f\n", neuronios[id].y);
         return deltaX;
 }
 
@@ -59,47 +83,28 @@ int main(){
     Tno neuronios[500];
     Tno armaz[500];
 
+    carrega_matriz(matriz);
     //Valores Iniciais do Neurônio
-// QUILES    neuronios[0].x=10;
-// QUILES    neuronios[0].y=1000;
-    //neuronios[1].x=1;
-    //neuronios[1].y=0;
-
-    // Quiles
     for (i=0 ; i<500 ; i++){
         neuronios[i].x = -2.0 + (double)(rand()%2001) / 500.0; // valor entre -2 e 2;
         neuronios[i].y = (double)(rand()%2001) / 500.0; // valor entre 0 e 4;
     }
 
-    //matriz[0][0]=0;
-    //matriz[0][1]=1;
-    //matriz[1][0]=1;
-    //matriz[1][1]=0;
-
+/*
     for(t=0;t<1000000;t++){
-        /*for(i = 0; i < 500; i++){
+        for(i = 0; i < 500; i++){
             neuronios[i].S = S(matriz, neuronios, i);
-            neuronios[i].x = neuronios[i].x + delta_x(matriz,neuronios,i);
-            neuronios[i].y = neuronios[i].y + delta_y(matriz,neuronios,i);
+            armaz[i].x = neuronios[i].x;
+            armaz[i].y = neuronios[i].y;
+            neuronios[i].x += delta_x(matriz,armaz,i);
+            neuronios[i].y += delta_y(matriz,armaz,i);
         }
-        */
-        neuronios[i].S  = S(matriz, neuronios, 0);
-        neuronios[i].S  = S(matriz, neuronios, 1);
-        armaz[0].x = neuronios[0].x;
-        armaz[0].y = neuronios[0].y;
-        armaz[1].x = neuronios[1].x;
-        armaz[1].y = neuronios[1].y;
-
-        neuronios[0].x += delta_x(matriz,armaz,0);
-        neuronios[0].y += delta_y(matriz,armaz,0);
-        neuronios[1].x += delta_x(matriz,armaz,1);
-        neuronios[1].y += delta_y(matriz,armaz,1);
         printf("x_0 = %.2f\n", neuronios[0].x);
 //        printf("y_0 = %.2f\n", neuronios[0].y);
         printf("x_1 = %.2f\n", neuronios[1].x);
         //printf("y_1 = %.2f\n", neuronios[1].y);
     }
-
+*/
 
     return 0;
 }
