@@ -97,8 +97,8 @@ int main(){
             neuronios[i].S = S(matriz, neuronios, i);
             armaz[i].x = neuronios[i].x;
             armaz[i].y = neuronios[i].y;
-            neuronios[i].x += delta_x(matriz,armaz,i);
-            neuronios[i].y += delta_y(matriz,armaz,i);
+            neuronios[i].x += (3.0 * neuronios[i].x - pow(neuronios[i].x, 3) + 2.0 - neuronios[i].y  + I_at + neuronios[i].S)*DT;
+            neuronios[i].y += (epsilon*(alfa*(1.0+tanh(neuronios[i].x/beta))-neuronios[i].y))*DT;
         }
         if(t % 50 == 0){
             for(j = 0; j < 6; j++ ){
