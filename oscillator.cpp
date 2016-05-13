@@ -102,7 +102,7 @@ int main(){
         }
         if(t % 50 == 0){
             for(j = 0; j < 6; j++ ){
-                printf("%.2f\t",neuronios[j].x);
+                printf("%.2f,",neuronios[j].x);
             }
             printf("\n");
         }
