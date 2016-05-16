@@ -118,11 +118,13 @@ int main(){
             neuronios[i].y += (epsilon*(alfa*(1.0+tanh(neuronios[i].x/beta))-neuronios[i].y))*DT;
         }
         if(t % 50 == 0){
-            /*for(j = 0; j < 6; j++ ){
+            for(j = 0; j < 5; j++ ){
                 printf("%.2f,",neuronios[j].x);
             }
-            printf("\n");*/
-            printf("%.2f\n", MediaDesvios(neuronios));
+            printf("%.2f, ",neuronios[5].x);
+            printf("%.2f", MediaDesvios(neuronios));
+            printf("\n");
+
         }
     }
 
