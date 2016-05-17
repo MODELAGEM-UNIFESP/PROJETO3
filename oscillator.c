@@ -64,8 +64,8 @@ double S(int matrix[MAX][MAX], Tno neu[MAX], int linha){
 
 double delta_x(int matriz[MAX][MAX], Tno neuronios[MAX], int id){
         double deltaX;
-    // QUILES - em equações envolvendo ponto flutuante, evitar o uso de inteiros, por exemplo, na equacao abaixo, substitui 3 por 3.0, etc.
-    // QUILES - Faltou o passo de integração DT
+    // QUILES - em equaï¿½ï¿½es envolvendo ponto flutuante, evitar o uso de inteiros, por exemplo, na equacao abaixo, substitui 3 por 3.0, etc.
+    // QUILES - Faltou o passo de integraï¿½ï¿½o DT
         deltaX = (3.0 * neuronios[id].x - pow(neuronios[id].x, 3) + 2.0 - neuronios[id].y  + I_at + neuronios[id].S)*DT;
         return deltaX;
 }
@@ -88,9 +88,9 @@ double MediaDesvios (Tno neuronios[500]){
     }
 
     for(i=0;i<500;i++){
-        mediadesvios+=fabs(neuronios[i].x-media)/500;
+        mediadesvios+=pow(fabs(neuronios[i].x-media),2)/500;
     }
-    return mediadesvios;
+    return sqrt(mediadesvios);
 
 }
 
@@ -109,7 +109,7 @@ int main(){
         neuronios[i].y   = (double)(rand()%2001) / 500.0; // valor entre 0 e 4;
     }
 
-    for(t=0;t<10000;t++){
+    for(t=0;t<1000000;t++){
         for(i = 0; i < 500; i++){
             neuronios[i].S = S(matriz, neuronios, i);
             armaz[i].x = neuronios[i].x;
@@ -117,12 +117,12 @@ int main(){
             neuronios[i].x += (3.0 * neuronios[i].x - pow(neuronios[i].x, 3) + 2.0 - neuronios[i].y  + I_at + neuronios[i].S)*DT;
             neuronios[i].y += (epsilon*(alfa*(1.0+tanh(neuronios[i].x/beta))-neuronios[i].y))*DT;
         }
-        if(t % 50 == 0){
-            for(j = 0; j < 5; j++ ){
+        if(t % 1000 == 0){
+            for(j = 0; j <449 ; j+=5){
                 printf("%.2f,",neuronios[j].x);
             }
-            printf("%.2f, ",neuronios[5].x);
-            printf("%.2f", MediaDesvios(neuronios));
+            printf("%.2f",neuronios[449].x);
+            //printf("%.2f", MediaDesvios(neuronios));
             printf("\n");
 
         }
@@ -131,4 +131,3 @@ int main(){
 
     return 0;
 }
-
