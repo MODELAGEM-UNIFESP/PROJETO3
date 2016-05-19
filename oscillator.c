@@ -4,7 +4,7 @@
 #include<time.h>
 
 #define MAX 500 // QUILES
-#define DT 0.01 // QUILES
+#define DT 0.05 // QUILES
 
 double W  = 0.1;
 double alfa  = 6.0;
@@ -55,7 +55,7 @@ double S(int matrix[MAX][MAX], Tno neu[MAX], int linha){
     double soma = 0;
 
     for(i = 0; i < MAX; i++){
-        if(matrix[linha][i] == 1 && neu[i].x > 0){
+        if(matrix[linha][i] == 1 && neu[i].x >= 0){
             soma += W;
         }
     }
@@ -64,8 +64,8 @@ double S(int matrix[MAX][MAX], Tno neu[MAX], int linha){
 
 double delta_x(int matriz[MAX][MAX], Tno neuronios[MAX], int id){
         double deltaX;
-    // QUILES - em equaï¿½ï¿½es envolvendo ponto flutuante, evitar o uso de inteiros, por exemplo, na equacao abaixo, substitui 3 por 3.0, etc.
-    // QUILES - Faltou o passo de integraï¿½ï¿½o DT
+    // QUILES - em equações envolvendo ponto flutuante, evitar o uso de inteiros, por exemplo, na equacao abaixo, substitui 3 por 3.0, etc.
+    // QUILES - Faltou o passo de integração DT
         deltaX = (3.0 * neuronios[id].x - pow(neuronios[id].x, 3) + 2.0 - neuronios[id].y  + I_at + neuronios[id].S)*DT;
         return deltaX;
 }
@@ -88,9 +88,9 @@ double MediaDesvios (Tno neuronios[500]){
     }
 
     for(i=0;i<500;i++){
-        mediadesvios+=pow(fabs(neuronios[i].x-media),2)/500;
+        mediadesvios+=fabs(neuronios[i].x-media)/500;
     }
-    return sqrt(mediadesvios);
+    return mediadesvios;
 
 }
 
@@ -106,7 +106,7 @@ int main(){
 
     for (i=0 ; i<500 ; i++){
         neuronios[i].x = -2.0 + (double)(rand()%2001) / 500.0; // valor entre -2 e 2;
-        neuronios[i].y   = (double)(rand()%2001) / 500.0; // valor entre 0 e 4;
+        neuronios[i].y   = (double)(rand()%20001) / 500.0; // valor entre 0 e 4;
     }
 
     for(t=0;t<1000000;t++){
@@ -114,15 +114,19 @@ int main(){
             neuronios[i].S = S(matriz, neuronios, i);
             armaz[i].x = neuronios[i].x;
             armaz[i].y = neuronios[i].y;
-            neuronios[i].x += (3.0 * neuronios[i].x - pow(neuronios[i].x, 3) + 2.0 - neuronios[i].y  + I_at + neuronios[i].S)*DT;
-            neuronios[i].y += (epsilon*(alfa*(1.0+tanh(neuronios[i].x/beta))-neuronios[i].y))*DT;
+            armaz[i].S = neuronios[i].S;
+            //if(i%2 == 0)
+                neuronios[i].x += (3.0 * armaz[i].x - pow(armaz[i].x, 3) + 2.0 - armaz[i].y  + I_at + armaz[i].S)*DT;
+           // else
+             //   neuronios[i].x += (3.0 * armaz[i].x - pow(armaz[i].x, 3) + 2.0 - armaz[i].y  + I_des + armaz[i].S)*DT;
+            neuronios[i].y += (epsilon*(alfa*(1.0+tanh(armaz[i].x/beta))-armaz[i].y))*DT;
         }
-        if(t % 1000 == 0){
-            for(j = 0; j <449 ; j+=5){
+        if(t % 500 == 0){
+            for(j = 0; j < 5; j++ ){
                 printf("%.2f,",neuronios[j].x);
             }
-            printf("%.2f",neuronios[449].x);
-            //printf("%.2f", MediaDesvios(neuronios));
+            printf("%.2f, ",neuronios[5].x);
+            printf("%.2f", MediaDesvios(neuronios));
             printf("\n");
 
         }
@@ -131,3 +135,4 @@ int main(){
 
     return 0;
 }
+
