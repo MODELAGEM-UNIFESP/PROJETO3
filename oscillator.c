@@ -6,7 +6,7 @@
 #define MAX 500 // QUILES
 #define DT 0.05 // QUILES
 
-double W  = 0.1;
+double W  = 0.99;
 double alfa  = 6.0;
 double beta  = 0.1;
 double theta  = 0.5;
@@ -117,8 +117,8 @@ int main(){
             armaz[i].S = neuronios[i].S;
             //if(i%2 == 0)
                 neuronios[i].x += (3.0 * armaz[i].x - pow(armaz[i].x, 3) + 2.0 - armaz[i].y  + I_at + armaz[i].S)*DT;
-           // else
-             //   neuronios[i].x += (3.0 * armaz[i].x - pow(armaz[i].x, 3) + 2.0 - armaz[i].y  + I_des + armaz[i].S)*DT;
+            //else
+               // neuronios[i].x += (3.0 * armaz[i].x - pow(armaz[i].x, 3) + 2.0 - armaz[i].y  + I_des + armaz[i].S)*DT;
             neuronios[i].y += (epsilon*(alfa*(1.0+tanh(armaz[i].x/beta))-armaz[i].y))*DT;
         }
         if(t % 500 == 0){
