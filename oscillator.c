@@ -6,7 +6,7 @@
 #define MAX 500 // QUILES
 #define DT 0.05 // QUILES
 
-double W  = 0.99;
+double W  = 0.1;
 double alfa  = 6.0;
 double beta  = 0.1;
 double theta  = 0.5;
@@ -64,8 +64,8 @@ double S(int matrix[MAX][MAX], Tno neu[MAX], int linha){
 
 double delta_x(int matriz[MAX][MAX], Tno neuronios[MAX], int id){
         double deltaX;
-    // QUILES - em equações envolvendo ponto flutuante, evitar o uso de inteiros, por exemplo, na equacao abaixo, substitui 3 por 3.0, etc.
-    // QUILES - Faltou o passo de integração DT
+    // QUILES - em equaÃ§Ãµes envolvendo ponto flutuante, evitar o uso de inteiros, por exemplo, na equacao abaixo, substitui 3 por 3.0, etc.
+    // QUILES - Faltou o passo de integraÃ§Ã£o DT
         deltaX = (3.0 * neuronios[id].x - pow(neuronios[id].x, 3) + 2.0 - neuronios[id].y  + I_at + neuronios[id].S)*DT;
         return deltaX;
 }
