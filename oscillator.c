@@ -115,10 +115,10 @@ int main(){
             armaz[i].x = neuronios[i].x;
             armaz[i].y = neuronios[i].y;
             armaz[i].S = neuronios[i].S;
-            //if(i%2 == 0)
+            if(rand()%100 <= 50)
                 neuronios[i].x += (3.0 * armaz[i].x - pow(armaz[i].x, 3) + 2.0 - armaz[i].y  + I_at + armaz[i].S)*DT;
-            //else
-               // neuronios[i].x += (3.0 * armaz[i].x - pow(armaz[i].x, 3) + 2.0 - armaz[i].y  + I_des + armaz[i].S)*DT;
+            else
+                neuronios[i].x += (3.0 * armaz[i].x - pow(armaz[i].x, 3) + 2.0 - armaz[i].y  + I_des + armaz[i].S)*DT;
             neuronios[i].y += (epsilon*(alfa*(1.0+tanh(armaz[i].x/beta))-armaz[i].y))*DT;
         }
         if(t % 500 == 0){
