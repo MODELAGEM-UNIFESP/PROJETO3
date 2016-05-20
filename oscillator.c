@@ -6,6 +6,14 @@
 #define MAX 500 // QUILES
 #define DT 0.05 // QUILES
 
+/*
+all_connected -> 249500
+graph_REG-> 500
+*/
+#define LINHAS_ENTRADA 249500
+
+
+
 double W  = 0.1;
 double alfa  = 6.0;
 double beta  = 0.1;
@@ -34,19 +42,11 @@ void carrega_matriz(int matriz[MAX][MAX]){
         }
     }
 
-    for(i = 0; i < MAX; i++){
+    for(i = 0; i < LINHAS_ENTRADA; i++){
         scanf("%d %d", &lin, &col);
         matriz[lin][col] = 1;
         matriz[col][lin] = 1;
     }
-
-//    for(k = 0; k < 100; k++)
-//        for(i = 0; i < MAX; i++){
-//            for(j = 0; j< MAX; j++){
-//                printf("%d\n", matriz[i][j]);
-//            }
-//            printf("\n");
-//        }
 }
 
 
@@ -54,28 +54,14 @@ double S(int matrix[MAX][MAX], Tno neu[MAX], int linha){
     int i;
     double soma = 0;
 
-    for(i = 0; i < MAX; i++){
-        if(matrix[linha][i] == 1 && neu[i].x >= 0){
+    for(i = 0; i < 500; i++){
+        if((matrix[linha][i] == 1) && (neu[i].x >= 0.0)){
             soma += W;
         }
     }
     return soma;
 }
 
-double delta_x(int matriz[MAX][MAX], Tno neuronios[MAX], int id){
-        double deltaX;
-    // QUILES - em equações envolvendo ponto flutuante, evitar o uso de inteiros, por exemplo, na equacao abaixo, substitui 3 por 3.0, etc.
-    // QUILES - Faltou o passo de integração DT
-        deltaX = (3.0 * neuronios[id].x - pow(neuronios[id].x, 3) + 2.0 - neuronios[id].y  + I_at + neuronios[id].S)*DT;
-        return deltaX;
-}
-
-double delta_y(int matriz[500][500], Tno neuronios[500], int id){
-        double deltaY;
-        deltaY = (epsilon*(alfa*(1.0+tanh(neuronios[id].x/beta))-neuronios[id].y))*DT;
-
-        return deltaY;
-}
 
 double MediaDesvios (Tno neuronios[500]){
     int i;
@@ -94,12 +80,32 @@ double MediaDesvios (Tno neuronios[500]){
 
 }
 
+void AtivacaoQuantidade(Tno neuronios[500], int q){
+    int i, x;
+
+    for(i=0;i<500;i++){
+        neuronios[x].I = -0.02;
+    }
+
+
+    srand( (unsigned)time(NULL) );
+    for(i=1;i<=q;i++){
+        x = rand()%500;
+        if(neuronios[x].I == 0.2){
+            i--;
+        }
+        neuronios[x].I = 0.2;
+    }
+}
 
 int main(){
-    int matriz[500][500];
+    int matriz[MAX][MAX];
     int i, j, t;
-    Tno neuronios[500];
-    Tno armaz[500];
+    Tno neuronios[MAX];
+    Tno armaz[MAX];
+
+
+    AtivacaoQuantidade(neuronios, 10);
 
     carrega_matriz(matriz);
     srand( (unsigned)time(NULL) );
@@ -109,26 +115,25 @@ int main(){
         neuronios[i].y   = (double)(rand()%20001) / 500.0; // valor entre 0 e 4;
     }
 
+
     for(t=0;t<1000000;t++){
         for(i = 0; i < 500; i++){
             neuronios[i].S = S(matriz, neuronios, i);
-            armaz[i].x = neuronios[i].x;
-            armaz[i].y = neuronios[i].y;
-            armaz[i].S = neuronios[i].S;
-            if(rand()%100 <= 50)
-                neuronios[i].x += (3.0 * armaz[i].x - pow(armaz[i].x, 3) + 2.0 - armaz[i].y  + I_at + armaz[i].S)*DT;
-            else
-                neuronios[i].x += (3.0 * armaz[i].x - pow(armaz[i].x, 3) + 2.0 - armaz[i].y  + I_des + armaz[i].S)*DT;
-            neuronios[i].y += (epsilon*(alfa*(1.0+tanh(armaz[i].x/beta))-armaz[i].y))*DT;
+        }
+
+        for(i = 0; i < 500; i++){
+            neuronios[i].x += (3.0 * neuronios[i].x - pow(neuronios[i].x, 3) + 2.0 - neuronios[i].y  + neuronios[i].I + neuronios[i].S)*DT;
+            neuronios[i].y += (epsilon*(alfa*(1.0+tanh(neuronios[i].x/beta))-neuronios[i].y))*DT;
         }
         if(t % 500 == 0){
-            for(j = 0; j < 5; j++ ){
-                printf("%.2f,",neuronios[j].x);
-            }
-            printf("%.2f, ",neuronios[5].x);
-            printf("%.2f", MediaDesvios(neuronios));
+            printf("%.2f, ",neuronios[0].x);
+            printf("%.2f, ",neuronios[99].x);
+            printf("%.2f, ",neuronios[199].x);
+            printf("%.2f, ",neuronios[299].x);
+            printf("%.2f, ",neuronios[399].x);
+            printf("%.2f, ",neuronios[499].x);
+            printf("%.4f", MediaDesvios(neuronios));
             printf("\n");
-
         }
     }
 
