@@ -10,7 +10,7 @@
 all_connected -> 249500
 graph_REG-> 500
 */
-#define LINHAS_ENTRADA 249500
+#define LINHAS_ENTRADA 500
 
 
 
@@ -55,7 +55,7 @@ double S(int matrix[MAX][MAX], Tno neu[MAX], int linha){
     double soma = 0;
 
     for(i = 0; i < 500; i++){
-        if((matrix[linha][i] == 1) && (neu[i].x >= 0.0)){
+        if((matrix[linha][i] == 1) && (neu[i].x >= 0.0) && (linha != i)){
             soma += W;
         }
     }
@@ -102,7 +102,7 @@ int main(){
     int matriz[MAX][MAX];
     int i, j, t;
     Tno neuronios[MAX];
-    Tno armaz[MAX];
+    float xAnt[MAX];
 
 
     AtivacaoQuantidade(neuronios, 10);
@@ -122,8 +122,9 @@ int main(){
         }
 
         for(i = 0; i < 500; i++){
+            xAnt[i]= neuronios[i].x;
             neuronios[i].x += (3.0 * neuronios[i].x - pow(neuronios[i].x, 3) + 2.0 - neuronios[i].y  + neuronios[i].I + neuronios[i].S)*DT;
-            neuronios[i].y += (epsilon*(alfa*(1.0+tanh(neuronios[i].x/beta))-neuronios[i].y))*DT;
+            neuronios[i].y += (epsilon*(alfa*(1.0+tanh(xAnt[i]/beta))-neuronios[i].y))*DT;
         }
         if(t % 500 == 0){
             printf("%.2f, ",neuronios[0].x);
@@ -134,6 +135,7 @@ int main(){
             printf("%.2f, ",neuronios[499].x);
             printf("%.4f", MediaDesvios(neuronios));
             printf("\n");
+            printf("%.2f, %.2f\n", neuronios[0].S, neuronios[1].S);
         }
     }
 
