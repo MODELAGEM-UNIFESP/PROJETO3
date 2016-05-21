@@ -4,12 +4,7 @@
 #include<time.h>
 
 #define MAX 500 // QUILES
-#define DT 0.05 // QUILES
-
-/*
-all_connected -> 249500
-graph_REG-> 500
-*/
+#define DT 0.001 // QUILES
 #define LINHAS_ENTRADA 500
 
 
@@ -32,7 +27,7 @@ struct no {
 
 typedef struct no Tno;
 
-void carrega_matriz(int matriz[MAX][MAX]){
+void carrega_matrizF(int matriz[MAX][MAX]){
     int i, j;
     int lin, col;
 
@@ -47,6 +42,34 @@ void carrega_matriz(int matriz[MAX][MAX]){
         matriz[lin][col] = 1;
         matriz[col][lin] = 1;
     }
+}
+
+void carrega_matrizH(int matriz[MAX][MAX]){
+    int i, j;
+    int lin, col;
+    char k[3];
+
+    FILE* file = fopen("graph_REG.txt", "r");
+
+
+
+    for(i = 0; i < MAX; i++){
+        for(j = 0; j< MAX; j++){
+            matriz[i][j] = 0;
+        }
+    }
+
+    while (!feof(file)) {
+        fscanf(file, "%d %d", &lin, &col);
+        matriz[lin][col] = 1;
+        matriz[col][lin] = 1;
+        /*printf("%d %d\n",col,lin );
+        printf("%d %d\n",matriz[lin][col], matriz[col][lin] );*/
+        i++;
+    }
+
+    fclose(file);
+
 }
 
 
@@ -74,7 +97,8 @@ double MediaDesvios (Tno neuronios[500]){
     }
 
     for(i=0;i<500;i++){
-        mediadesvios+=fabs(neuronios[i].x-media)/500;
+        if(fabs(neuronios[i].x -media) > mediadesvios)
+            mediadesvios=fabs(neuronios[i].x-media);
     }
     return mediadesvios;
 
@@ -84,17 +108,17 @@ void AtivacaoQuantidade(Tno neuronios[500], int q){
     int i, x;
 
     for(i=0;i<500;i++){
-        neuronios[x].I = -0.02;
+        neuronios[x].I = I_des;
     }
 
 
     srand( (unsigned)time(NULL) );
     for(i=1;i<=q;i++){
         x = rand()%500;
-        if(neuronios[x].I == 0.2){
+        if(neuronios[x].I == I_at){
             i--;
         }
-        neuronios[x].I = 0.2;
+        neuronios[x].I = I_at;
     }
 }
 
@@ -105,9 +129,9 @@ int main(){
     float xAnt[MAX];
 
 
-    AtivacaoQuantidade(neuronios, 10);
+    AtivacaoQuantidade(neuronios, 250);
 
-    carrega_matriz(matriz);
+    carrega_matrizH(matriz);
     srand( (unsigned)time(NULL) );
 
     for (i=0 ; i<500 ; i++){
@@ -117,8 +141,21 @@ int main(){
 
 
     for(t=0;t<1000000;t++){
+
         for(i = 0; i < 500; i++){
             neuronios[i].S = S(matriz, neuronios, i);
+        }
+
+    if(t % 500 == 0){
+            printf("%.2f, ",neuronios[0].x);
+            printf("%.2f, ",neuronios[1].x);
+            printf("%.2f, ",neuronios[2].x);
+            printf("%.2f, ",neuronios[3].x);
+            printf("%.2f, ",neuronios[4].x);
+            printf("%.2f, ",neuronios[5].x);
+            printf("%.2f", MediaDesvios(neuronios));
+            printf("\n");
+            printf("%.2f, %.2f\n", neuronios[0].S, neuronios[1].S);
         }
 
         for(i = 0; i < 500; i++){
@@ -126,17 +163,7 @@ int main(){
             neuronios[i].x += (3.0 * neuronios[i].x - pow(neuronios[i].x, 3) + 2.0 - neuronios[i].y  + neuronios[i].I + neuronios[i].S)*DT;
             neuronios[i].y += (epsilon*(alfa*(1.0+tanh(xAnt[i]/beta))-neuronios[i].y))*DT;
         }
-        if(t % 500 == 0){
-            printf("%.2f, ",neuronios[0].x);
-            printf("%.2f, ",neuronios[99].x);
-            printf("%.2f, ",neuronios[199].x);
-            printf("%.2f, ",neuronios[299].x);
-            printf("%.2f, ",neuronios[399].x);
-            printf("%.2f, ",neuronios[499].x);
-            printf("%.4f", MediaDesvios(neuronios));
-            printf("\n");
-            printf("%.2f, %.2f\n", neuronios[0].S, neuronios[1].S);
-        }
+
     }
 
 
