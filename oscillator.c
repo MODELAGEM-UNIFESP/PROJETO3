@@ -124,7 +124,7 @@ int main(){
     Tno neuronios[MAX];
     double xAnt[MAX];
 
-    AtivacaoQuantidade(neuronios, 250);
+    AtivacaoQuantidade(neuronios, 500);
 
     carrega_matrizH(matriz);
 
@@ -142,14 +142,12 @@ int main(){
         }
 
         if(t % 500 == 0){
-            printf("X: ");
             printf("%.2f, ",neuronios[0].x);
-            printf("%.2f, ",neuronios[1].x);
-            printf("%.2f, ",neuronios[2].x);
-            printf("%.2f, ",neuronios[3].x);
-            printf("%.2f, ",neuronios[4].x);
-            printf("%.2f, ",neuronios[5].x);
-            printf("\n");
+            printf("%.2f, ",neuronios[99].x);
+            printf("%.2f, ",neuronios[199].x);
+            printf("%.2f, ",neuronios[299].x);
+            printf("%.2f, ",neuronios[399].x);
+            printf("%.2f, ",neuronios[499].x);
             /*printf("Y: ");
             printf("%.2f, ",neuronios[0].y);
             printf("%.2f, ",neuronios[1].y);
@@ -158,16 +156,17 @@ int main(){
             printf("%.2f, ",neuronios[4].y);
             printf("%.2f, ",neuronios[5].y);
             printf("\n");*/
-            printf("DESVIO: %.2f\n", DesvioMaximo(neuronios));
+            printf("%.2f\n", DesvioMaximo(neuronios));
         }
 
         for(i = 0; i < 500; i++){
+
             //xAnt armazena o valor antigo de x.
             xAnt[i]= neuronios[i].x;
-        
+
             //O valor de x é atualizado.
             neuronios[i].x += (3.0 * neuronios[i].x - pow(neuronios[i].x, 3.0) + 2.0 - neuronios[i].y  + neuronios[i].I + neuronios[i].S)*DT;
-            
+
             //O valor de y é atualizado, com base no valor antigo de x.
             neuronios[i].y += (epsilon*(alfa*(1.0+tanh(xAnt[i]/beta))-neuronios[i].y))*DT;
         }
