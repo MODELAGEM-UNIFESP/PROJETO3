@@ -8,7 +8,7 @@
 #define LINHAS_ENTRADA 500
 
 
-
+//Parâmetros
 double W  = 0.1;
 double alfa  = 6.0;
 double beta  = 0.1;
@@ -27,6 +27,7 @@ struct no {
 
 typedef struct no Tno;
 
+//Carregamento da matriz pelo terminal.
 void carrega_matrizF(int matriz[MAX][MAX]){
     int i, j;
     int lin, col;
@@ -44,6 +45,7 @@ void carrega_matrizF(int matriz[MAX][MAX]){
     }
 }
 
+//Carregamento da matriz diretamente no codeblocks.
 void carrega_matrizH(int matriz[MAX][MAX]){
     int i, j;
     int lin, col;
@@ -64,10 +66,9 @@ void carrega_matrizH(int matriz[MAX][MAX]){
     }
 
     fclose(file);
-
 }
 
-
+//Calculo de S.
 double S(int matrix[MAX][MAX], Tno neu[MAX], int linha){
     int i;
     double soma = 0;
@@ -80,30 +81,30 @@ double S(int matrix[MAX][MAX], Tno neu[MAX], int linha){
     return soma;
 }
 
-
-double MediaDesvios (Tno neuronios[500]){
+//Desvio máximo dos valores de x em relação a média dos valores de x.
+double DesvioMaximo (Tno neuronios[500]){
     int i;
-    double media, mediadesvios;
+    double media, desviomaximo;
     media = 0;
-    mediadesvios = 0;
+    desviomaximo = 0;
 
     for(i=0;i<500;i++){
         media+=neuronios[i].x/500;
     }
 
     for(i=0;i<500;i++){
-        if(fabs(neuronios[i].x -media) > mediadesvios)
-            mediadesvios=fabs(neuronios[i].x-media);
+        if(fabs(neuronios[i].x -media) > desviomaximo)
+            desviomaximo=fabs(neuronios[i].x-media);
     }
-    return mediadesvios;
-
+    return desviomaximo;
 }
 
+//Ativação aleatória de uma quantidade fixa 'q' de neurônios.
 void AtivacaoQuantidade(Tno neuronios[500], int q){
     int i, x;
 
     for(i=0;i<500;i++){
-        neuronios[x].I = I_des;
+        neuronios[i].I = I_des;
     }
 
 
@@ -123,17 +124,15 @@ int main(){
     Tno neuronios[MAX];
     double xAnt[MAX];
 
-
     AtivacaoQuantidade(neuronios, 250);
 
     carrega_matrizH(matriz);
-    srand( (unsigned)time(NULL) );
 
+    srand( (unsigned)time(NULL) );
     for (i=0 ; i<500 ; i++){
         neuronios[i].x = -2.0 + (double)(rand()%2001) / 500.0; // valor entre -2 e 2;
         neuronios[i].y = (double)(rand()%20001) / 500.0; // valor entre 0 e 4;
     }
-
 
     for(t=0;t<1000000;t++){
 
@@ -141,14 +140,14 @@ int main(){
             neuronios[i].S = S(matriz, neuronios, i);
         }
 
-    if(t % 500 == 0){
+        if(t % 500 == 0){
             printf("%.2f, ",neuronios[0].x);
             printf("%.2f, ",neuronios[1].x);
             printf("%.2f, ",neuronios[2].x);
             printf("%.2f, ",neuronios[3].x);
             printf("%.2f, ",neuronios[4].x);
             printf("%.2f, ",neuronios[5].x);
-            printf("%.2f", MediaDesvios(neuronios));
+            printf("%.2f", DesvioMaximo(neuronios));
             printf("\n");
             //printf("%.2f, %.2f\n", neuronios[0].S, neuronios[1].S);
         }
@@ -158,9 +157,7 @@ int main(){
             neuronios[i].x += (3.0 * neuronios[i].x - pow(neuronios[i].x, 3.0) + 2.0 - neuronios[i].y  + neuronios[i].I + neuronios[i].S)*DT;
             neuronios[i].y += (epsilon*(alfa*(1.0+tanh(xAnt[i]/beta))-neuronios[i].y))*DT;
         }
-
     }
-
 
     return 0;
 }
