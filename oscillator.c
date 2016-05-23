@@ -68,7 +68,7 @@ void carrega_matrizH(int matriz[MAX][MAX]){
     fclose(file);
 }
 
-//Calculo de S.
+//Cálculo de S.
 double S(int matrix[MAX][MAX], Tno neu[MAX], int linha){
     int i;
     double soma = 0;
@@ -81,7 +81,7 @@ double S(int matrix[MAX][MAX], Tno neu[MAX], int linha){
     return soma;
 }
 
-//Desvio máximo dos valores de x em relação a média dos valores de x.
+//Desvio máximo dos valores de x em relação à média dos valores de x.
 double DesvioMaximo (Tno neuronios[500]){
     int i;
     double media, desviomaximo;
@@ -136,25 +136,39 @@ int main(){
 
     for(t=0;t<1000000;t++){
 
+        //Calcula-se S para cada neurônio.
         for(i = 0; i < 500; i++){
             neuronios[i].S = S(matriz, neuronios, i);
         }
 
         if(t % 500 == 0){
+            printf("X: ");
             printf("%.2f, ",neuronios[0].x);
             printf("%.2f, ",neuronios[1].x);
             printf("%.2f, ",neuronios[2].x);
             printf("%.2f, ",neuronios[3].x);
             printf("%.2f, ",neuronios[4].x);
             printf("%.2f, ",neuronios[5].x);
-            printf("%.2f", DesvioMaximo(neuronios));
             printf("\n");
-            //printf("%.2f, %.2f\n", neuronios[0].S, neuronios[1].S);
+            /*printf("Y: ");
+            printf("%.2f, ",neuronios[0].y);
+            printf("%.2f, ",neuronios[1].y);
+            printf("%.2f, ",neuronios[2].y);
+            printf("%.2f, ",neuronios[3].y);
+            printf("%.2f, ",neuronios[4].y);
+            printf("%.2f, ",neuronios[5].y);
+            printf("\n");*/
+            printf("DESVIO: %.2f\n", DesvioMaximo(neuronios));
         }
 
         for(i = 0; i < 500; i++){
+            //xAnt armazena o valor antigo de x.
             xAnt[i]= neuronios[i].x;
+        
+            //O valor de x é atualizado.
             neuronios[i].x += (3.0 * neuronios[i].x - pow(neuronios[i].x, 3.0) + 2.0 - neuronios[i].y  + neuronios[i].I + neuronios[i].S)*DT;
+            
+            //O valor de y é atualizado, com base no valor antigo de x.
             neuronios[i].y += (epsilon*(alfa*(1.0+tanh(xAnt[i]/beta))-neuronios[i].y))*DT;
         }
     }
