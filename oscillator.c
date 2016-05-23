@@ -4,7 +4,7 @@
 #include<time.h>
 
 #define MAX 500 // QUILES
-#define DT 0.001 // QUILES
+#define DT 0.05 // QUILES
 #define LINHAS_ENTRADA 500
 
 
@@ -47,11 +47,8 @@ void carrega_matrizF(int matriz[MAX][MAX]){
 void carrega_matrizH(int matriz[MAX][MAX]){
     int i, j;
     int lin, col;
-    char k[3];
 
     FILE* file = fopen("graph_REG.txt", "r");
-
-
 
     for(i = 0; i < MAX; i++){
         for(j = 0; j< MAX; j++){
@@ -63,8 +60,6 @@ void carrega_matrizH(int matriz[MAX][MAX]){
         fscanf(file, "%d %d", &lin, &col);
         matriz[lin][col] = 1;
         matriz[col][lin] = 1;
-        /*printf("%d %d\n",col,lin );
-        printf("%d %d\n",matriz[lin][col], matriz[col][lin] );*/
         i++;
     }
 
@@ -78,7 +73,7 @@ double S(int matrix[MAX][MAX], Tno neu[MAX], int linha){
     double soma = 0;
 
     for(i = 0; i < 500; i++){
-        if((matrix[linha][i] == 1) && (neu[i].x >= 0.0) && (linha != i)){
+        if((matrix[linha][i] == 1) && (neu[i].x-theta >= 0.0)){
             soma += W;
         }
     }
@@ -126,7 +121,7 @@ int main(){
     int matriz[MAX][MAX];
     int i, j, t;
     Tno neuronios[MAX];
-    float xAnt[MAX];
+    double xAnt[MAX];
 
 
     AtivacaoQuantidade(neuronios, 250);
@@ -136,7 +131,7 @@ int main(){
 
     for (i=0 ; i<500 ; i++){
         neuronios[i].x = -2.0 + (double)(rand()%2001) / 500.0; // valor entre -2 e 2;
-        neuronios[i].y   = (double)(rand()%20001) / 500.0; // valor entre 0 e 4;
+        neuronios[i].y = (double)(rand()%20001) / 500.0; // valor entre 0 e 4;
     }
 
 
@@ -155,12 +150,12 @@ int main(){
             printf("%.2f, ",neuronios[5].x);
             printf("%.2f", MediaDesvios(neuronios));
             printf("\n");
-            printf("%.2f, %.2f\n", neuronios[0].S, neuronios[1].S);
+            //printf("%.2f, %.2f\n", neuronios[0].S, neuronios[1].S);
         }
 
         for(i = 0; i < 500; i++){
             xAnt[i]= neuronios[i].x;
-            neuronios[i].x += (3.0 * neuronios[i].x - pow(neuronios[i].x, 3) + 2.0 - neuronios[i].y  + neuronios[i].I + neuronios[i].S)*DT;
+            neuronios[i].x += (3.0 * neuronios[i].x - pow(neuronios[i].x, 3.0) + 2.0 - neuronios[i].y  + neuronios[i].I + neuronios[i].S)*DT;
             neuronios[i].y += (epsilon*(alfa*(1.0+tanh(xAnt[i]/beta))-neuronios[i].y))*DT;
         }
 
